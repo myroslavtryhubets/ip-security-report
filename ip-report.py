@@ -1,27 +1,40 @@
+import random
 from datetime import datetime
 from flask import render_template
 import flask, csv, requests, time
 report_data = []
 
+def get_key():
+    with open('keys.txt') as read_file:
+        file_lines = read_file.read().splitlines()
+        return random.choice(file_lines)
 
 
 
-
+i = 0
 with open('ip-list.csv', newline='\n') as csvfile:
     reader = csv.reader(csvfile, delimiter=',', quotechar='|')
     for row in reader:
-        print(row[0])
-
+        
+        i += 1
+        print(i, row[0])
         response = requests.get(
             'https://www.virustotal.com/api/v3/ip_addresses/'+row[0],
             headers={
-                'x-apikey': '4489031d1d0956f2fd48a8d89c8875d1a0d37a4c420829e7a784fa4cd564d273'},
+                'x-apikey': get_key()},
         )
 
         json_response = response.json()
         json_data = json_response["data"]["attributes"]
 
+        try:
+            last_modification_date = datetime.fromtimestamp(
+                json_data["last_modification_date"]).strftime('%Y-%m-%d %H:%M:%S')
+        except:
+            last_modification_date = datetime.fromtimestamp(1).strftime('%Y-%m-%d %H:%M:%S')
+
         api_response = {
+            "id": i,
             "ip": json_response["data"]["id"],
             "reputation": json_data["reputation"],
             "country": json_data["country"],
@@ -29,15 +42,14 @@ with open('ip-list.csv', newline='\n') as csvfile:
             "malicious": json_data["last_analysis_stats"]["malicious"],
             "suspicious": json_data["last_analysis_stats"]["suspicious"],
             "undetected": json_data["last_analysis_stats"]["undetected"],
-            "last_modification_date": datetime.fromtimestamp(
-                json_data["last_modification_date"]).strftime('%Y-%m-%d %H:%M:%S'),
+            "last_modification_date": last_modification_date,
             "link": "https://www.virustotal.com/gui/ip-address/"+json_response["data"]["id"]+"/detection"
         }
 
         report_data.append(api_response)
         print(api_response)
         print()
-        #time.sleep(15)
+        time.sleep(10)
 
 #print(a_list)
 
