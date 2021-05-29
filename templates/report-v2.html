@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>Report</title>
+
+    <style type="text/css">
+        html {
+            font-family: sans-serif;
+            -ms-text-size-adjust: 100%;
+            -webkit-text-size-adjust: 100%
+        }
+
+        body {
+            margin: 0
+        }
+
+        article,
+        aside,
+        details,
+        figcaption,
+        figure,
+        footer,
+        header,
+        hgroup,
+        main,
+        nav,
+        section,
+        summary {
+            display: block
+        }
+
+        audio,
+        canvas,
+        progress,
+        video {
+            display: inline-block;
+            vertical-align: baseline
+        }
+
+        audio:not([controls]) {
+            display: none;
+            height: 0
+        }
+
+        [hidden],
+        template {
+            display: none
+        }
+
+        a {
+            background: transparent
+        }
+
+        a:active,
+        a:hover {
+            outline: 0
+        }
+
+        abbr[title] {
+            border-bottom: 1px dotted
+        }
+
+        b,
+        strong {
+            font-weight: 700
+        }
+
+        dfn {
+            font-style: italic
+        }
+
+        h1 {
+            font-size: 2em;
+            margin: .67em 0
+        }
+
+        mark {
+            background: #ff0;
+            color: #000
+        }
+
+        small {
+            font-size: 80%
+        }
+
+        sub,
+        sup {
+            font-size: 75%;
+            line-height: 0;
+            position: relative;
+            vertical-align: baseline
+        }
+
+        sup {
+            top: -.5em
+        }
+
+        sub {
+            bottom: -.25em
+        }
+
+        img {
+            border: 0
+        }
+
+        svg:not(:root) {
+            overflow: hidden
+        }
+
+        figure {
+            margin: 1em 40px
+        }
+
+        hr {
+            -moz-box-sizing: content-box;
+            box-sizing: content-box;
+            height: 0
+        }
+
+        pre {
+            overflow: auto
+        }
+
+        code,
+        kbd,
+        pre,
+        samp {
+            font-family: monospace, monospace;
+            font-size: 1em
+        }
+
+        button,
+        input,
+        optgroup,
+        select,
+        textarea {
+            color: inherit;
+            font: inherit;
+            margin: 0
+        }
+
+        button {
+            overflow: visible
+        }
+
+        button,
+        select {
+            text-transform: none
+        }
+
+        button,
+        html input[type="button"],
+        input[type="reset"],
+        input[type="submit"] {
+            -webkit-appearance: button;
+            cursor: pointer
+        }
+
+        button[disabled],
+        html input[disabled] {
+            cursor: default
+        }
+
+        button::-moz-focus-inner,
+        input::-moz-focus-inner {
+            border: 0;
+            padding: 0
+        }
+
+        input {
+            line-height: normal
+        }
+
+        input[type="checkbox"],
+        input[type="radio"] {
+            box-sizing: border-box;
+            padding: 0
+        }
+
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            height: auto
+        }
+
+        input[type="search"] {
+            -webkit-appearance: textfield;
+            -moz-box-sizing: content-box;
+            -webkit-box-sizing: content-box;
+            box-sizing: content-box
+        }
+
+        input[type="search"]::-webkit-search-cancel-button,
+        input[type="search"]::-webkit-search-decoration {
+            -webkit-appearance: none
+        }
+
+        fieldset {
+            border: 1px solid silver;
+            margin: 0 2px;
+            padding: .35em .625em .75em
+        }
+
+        legend {
+            border: 0;
+            padding: 0
+        }
+
+        textarea {
+            overflow: auto
+        }
+
+        optgroup {
+            font-weight: 700
+        }
+
+        table {
+            border-collapse: collapse;
+            border-spacing: 0
+        }
+
+        td,
+        th {
+            padding: 0
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            text-align: left;
+        }
+    </style>
+</head>
+
+<body style="font-size: 14px; position: relative; padding: 0;">
+    <table class="table table-bordered table-striped fixtable">
+        <thead>
+            <tr>
+                <th>IP</th>
+                <th>Reputation</th>
+                <th>Country</th>
+                <th>Harmless</th>
+                <th>Malicious</th>
+                <th>Suspicious</th>
+                <th>Undetected</th>
+                <th>Last Date</th>
+                <th>Link</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for api in data %}
+            <tr>
+                <td>{{ api.ip }}</td>
+
+                {% if api.reputation < 0 %}
+                <td style="color: red">{{ api.reputation }}</td>
+                {% else %}
+                <td style="color: green">{{ api.reputation }}</td>
+                {% endif %}
+
+                <td>{{ api.country }}</td>
+                <td>{{ api.harmless }}</td>
+
+                {% if api.malicious > 0 %}
+                <td style="color: red">{{ api.malicious }}</td>
+                {% else %}
+                <td style="color: green">{{ api.malicious }}</td>
+                {% endif %}
+
+                {% if api.suspicious > 0 %}
+                <td style="color: red">{{ api.suspicious }}</td>
+                {% else %}
+                <td style="color: green">{{ api.suspicious }}</td>
+                {% endif %}
+
+                <td>{{ api.undetected }}</td>
+                <td>{{ api.last_modification_date }}</td>
+                <td><a href="{{ api.link }}">Open VirusTotal</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+    <style type="text/css">
+        .fixtable-fixed {
+            position: fixed;
+            top: 0;
+            z-index: 101;
+            background-color: #ffffff;
+            border-bottom: 1px solid #ddd;
+        }
+    </style>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function FixTable(table) {
+            var inst = this;
+            this.table = table;
+
+            $('tr > th', $(this.table)).each(function (index) {
+                var div_fixed = $('<div/>').addClass('fixtable-fixed');
+                var div_relat = $('<div/>').addClass('fixtable-relative');
+                div_fixed.html($(this).html());
+                div_relat.html($(this).html());
+                $(this).html('').append(div_fixed).append(div_relat);
+                $(div_fixed).hide();
+            });
+
+            this.StyleColumns();
+            this.FixColumns();
+
+            $(window).scroll(function () {
+                inst.FixColumns()
+            }).resize(function () {
+                inst.StyleColumns()
+            });
+        }
+
+        FixTable.prototype.StyleColumns = function () {
+            var inst = this;
+            $('tr > th', $(this.table)).each(function () {
+                var div_relat = $('div.fixtable-relative', $(this));
+                var th = $(div_relat).parent('th');
+                $('div.fixtable-fixed', $(this)).css({
+                    'width': $(th).outerWidth(true) - parseInt($(th).css('border-left-width')) + 'px',
+                    'height': $(th).outerHeight(true) + 'px',
+                    'left': $(div_relat).offset().left - parseInt($(th).css('padding-left')) + 'px',
+                    'padding-top': $(div_relat).offset().top - $(inst.table).offset().top + 'px',
+                    'padding-left': $(th).css('padding-left'),
+                    'padding-right': $(th).css('padding-right')
+                });
+            });
+        }
+
+        FixTable.prototype.FixColumns = function () {
+            var inst = this;
+            var show = false;
+            var s_top = $(window).scrollTop();
+            var h_top = $(inst.table).offset().top;
+
+            if (s_top < (h_top + $(inst.table).height() - $(inst.table).find('.fixtable-fixed').outerHeight()) && s_top > h_top) {
+                show = true;
+            }
+
+            $('tr > th > div.fixtable-fixed', $(this.table)).each(function () {
+                show ? $(this).show() : $(this).hide()
+            });
+        }
+
+        $(document).ready(function () {
+            $('.fixtable').each(function () {
+                new FixTable(this);
+            });
+        });
+    </script>
+</body>
+
+</html>
