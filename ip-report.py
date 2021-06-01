@@ -9,16 +9,12 @@ def get_key():
         file_lines = read_file.read().splitlines()
         return random.choice(file_lines)
 
-
-
-i = 0
 with open('ip-list.csv', newline='\n') as csvfile:
     reader = csv.reader(csvfile, delimiter=',', quotechar='|')
+    i = 0
     for row in reader:
         
         i += 1
-        #print(i,get_key())
-        #print(i, row[0])
         response = requests.get(
             'https://www.virustotal.com/api/v3/ip_addresses/'+row[0],
             headers={
@@ -48,12 +44,7 @@ with open('ip-list.csv', newline='\n') as csvfile:
         }
 
         report_data.append(api_response)
-        print(api_response)
-        print()
         time.sleep(10)
-
-#print(a_list)
-
 
 now = datetime.now()
 dt_string = now.strftime("%Y-%m-%d %H-%M-%S")
