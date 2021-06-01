@@ -17,7 +17,8 @@ with open('ip-list.csv', newline='\n') as csvfile:
     for row in reader:
         
         i += 1
-        print(i, row[0])
+        #print(i,get_key())
+        #print(i, row[0])
         response = requests.get(
             'https://www.virustotal.com/api/v3/ip_addresses/'+row[0],
             headers={
